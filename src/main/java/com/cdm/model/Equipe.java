@@ -2,6 +2,7 @@ package com.cdm.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -17,7 +18,8 @@ import java.util.Objects;
 public class Equipe implements Serializable
 {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "id_Sequence" )
+    @SequenceGenerator( name = "id_Sequence", sequenceName = "EQUIPE_SEQ" )
     private int id;
 
     @Column( nullable = false, name = "nom" )
@@ -29,70 +31,70 @@ public class Equipe implements Serializable
     @Column( name = "flag" )
     private String flag;
 
+    @JsonBackReference(value="equipe-group")
     @ManyToOne( cascade = CascadeType.PERSIST, fetch = FetchType.LAZY )
     @JoinColumn( name = "GROUPE_ID" )
-    @JsonManagedReference
     private Groupe groupe;
 
-    @JsonBackReference
-    @OneToMany( mappedBy = "equipe1", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    @OneToMany( mappedBy = "equipe1", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
     private List<Matche> matcheHomeList = new ArrayList<>();
 
-    @JsonBackReference
-    @OneToMany( mappedBy = "equipe2", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    @OneToMany( mappedBy = "equipe2", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
     private List<Matche> matcheAwayList = new ArrayList<>();
 
-    public int getId()
+    public int getId ()
     {
         return id;
     }
 
-    public void setId( int id )
+    public void setId ( int id )
     {
         this.id = id;
     }
 
-    public String getNom()
+    public String getNom ()
     {
         return nom;
     }
 
-    public void setNom( String nom )
+    public void setNom ( String nom )
     {
         this.nom = nom;
     }
 
-    public String getZone()
+    public String getZone ()
     {
         return zone;
     }
 
-    public void setZone( String zone )
+    public void setZone ( String zone )
     {
         this.zone = zone;
     }
 
-    public String getFlag()
+    public String getFlag ()
     {
         return flag;
     }
 
-    public void setFlag( String flag )
+    public void setFlag ( String flag )
     {
         this.flag = flag;
     }
 
-    public Groupe getGroupe()
+    public Groupe getGroupe ()
     {
         return groupe;
     }
 
-    public void setGroupe( Groupe groupe )
+    public void setGroupe ( Groupe groupe )
     {
         this.groupe = groupe;
     }
 
-    public List<Matche> getMatcheHomeList()
+    public List<Matche> getMatcheHomeList ()
     {
         if ( matcheHomeList == null )
         {
@@ -101,12 +103,12 @@ public class Equipe implements Serializable
         return matcheHomeList;
     }
 
-    public void setMatcheHomeList( List<Matche> matcheHomeList )
+    public void setMatcheHomeList ( List<Matche> matcheHomeList )
     {
         this.matcheHomeList = matcheHomeList;
     }
 
-    public List<Matche> getMatcheAwayList()
+    public List<Matche> getMatcheAwayList ()
     {
         if ( matcheAwayList == null )
         {
@@ -115,13 +117,13 @@ public class Equipe implements Serializable
         return matcheAwayList;
     }
 
-    public void setMatcheAwayList( List<Matche> matcheAwayList )
+    public void setMatcheAwayList ( List<Matche> matcheAwayList )
     {
         this.matcheAwayList = matcheAwayList;
     }
 
     @Override
-    public boolean equals( Object o )
+    public boolean equals ( Object o )
     {
         if ( this == o )
         {
@@ -131,7 +133,7 @@ public class Equipe implements Serializable
         {
             return false;
         }
-        Equipe equipe = ( Equipe ) o;
+        Equipe equipe = (Equipe) o;
         return id == equipe.id &&
                 Objects.equals( nom, equipe.nom ) &&
                 Objects.equals( zone, equipe.zone ) &&
@@ -139,7 +141,7 @@ public class Equipe implements Serializable
     }
 
     @Override
-    public int hashCode()
+    public int hashCode ()
     {
 
         return Objects.hash( id, nom, zone, flag );

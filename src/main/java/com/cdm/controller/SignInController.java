@@ -1,6 +1,8 @@
 package com.cdm.controller;
 
+import com.cdm.model.Classement;
 import com.cdm.model.User;
+import com.cdm.repository.ClassementRepository;
 import com.cdm.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +30,9 @@ public class SignInController
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ClassementRepository classementRepository;
+
     @RequestMapping( method = RequestMethod.POST )
     public ResponseEntity signin( @RequestBody User user )
     {
@@ -38,8 +43,23 @@ public class SignInController
             // Passage de la verification à true
             user.setVerification( true );
 
+            // Création de l'objet Classement pour le user
+            Classement classement = new Classement();
+
+            // Sauvegarde du classement
+            classementRepository.save( classement );
+
+            // Attachement du classement au user
+            classement.setUser( user );
+            user.setClassement( classement );
+
             // Sauvegarde en base du user
             userRepository.save( user );
+
+
+
+            // Génération du token pour le user
+            user.generateToken();
 
             return new ResponseEntity( user, HttpStatus.CREATED );
         }

@@ -40,7 +40,7 @@ public class LogInController
             logger.error( "Connexion fail sur le mail {}", () -> user.getMail() );
             return new ResponseEntity( "User not found", HttpStatus.NO_CONTENT );
         }
-        String token = generateToken().toString();
+        String token = userInBase.generateToken().toString();
         if ( token.equals( "" ) )
         {
             return new ResponseEntity( "Token invalid", HttpStatus.PARTIAL_CONTENT );
@@ -50,30 +50,5 @@ public class LogInController
             userInBase.setToken( token );
         }
         return new ResponseEntity( userInBase, HttpStatus.OK );
-    }
-
-    /**
-     * Génération d'un token pour l'api
-     *
-     * @return un token généré aléatoirement
-     */
-    private char[] generateToken()
-    {
-        char[] digits = new char[ 16 ];
-        SecureRandom srnd = null;
-        try
-        {
-            srnd = SecureRandom.getInstance( "SHA1PRNG" );
-        }
-        catch ( NoSuchAlgorithmException e )
-        {
-            logger.error( "aucun algorithme connu", e );
-            return digits;
-        }
-        for ( int i = 0; i < digits.length; i++ )
-        {
-            digits[ i ] = ( char ) ( '0' + srnd.nextInt( 9 ) );
-        }
-        return digits;
     }
 }

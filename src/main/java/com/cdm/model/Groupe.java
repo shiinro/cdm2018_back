@@ -2,6 +2,7 @@ package com.cdm.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,41 +16,42 @@ import java.util.Objects;
 public class Groupe implements Serializable
 {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "id_Sequence" )
+    @SequenceGenerator( name = "id_Sequence", sequenceName = "GROUPE_SEQ" )
     private int id;
 
     @Column( name = "nom" )
     private String nom;
 
-    @JsonBackReference
+    @JsonManagedReference( value = "equipe-group" )
     @OneToMany( targetEntity = Equipe.class, mappedBy = "groupe", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY )
     private List<Equipe> equipes = new ArrayList<>();
 
-    @JsonBackReference
+    @JsonManagedReference( value = "group-match" )
     @OneToMany( targetEntity = Matche.class, mappedBy = "groupe", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY )
     private List<Matche> matches = new ArrayList<>();
 
-    public int getId()
+    public int getId ()
     {
         return id;
     }
 
-    public void setId( int id )
+    public void setId ( int id )
     {
         this.id = id;
     }
 
-    public String getNom()
+    public String getNom ()
     {
         return nom;
     }
 
-    public void setNom( String nom )
+    public void setNom ( String nom )
     {
         this.nom = nom;
     }
 
-    public List<Equipe> getEquipes()
+    public List<Equipe> getEquipes ()
     {
         if ( equipes == null )
         {
@@ -58,12 +60,12 @@ public class Groupe implements Serializable
         return equipes;
     }
 
-    public void setEquipes( List<Equipe> equipes )
+    public void setEquipes ( List<Equipe> equipes )
     {
         this.equipes = equipes;
     }
 
-    public List<Matche> getMatches()
+    public List<Matche> getMatches ()
     {
         if ( matches == null )
         {
@@ -72,13 +74,13 @@ public class Groupe implements Serializable
         return matches;
     }
 
-    public void setMatches( List<Matche> matches )
+    public void setMatches ( List<Matche> matches )
     {
         this.matches = matches;
     }
 
     @Override
-    public boolean equals( Object o )
+    public boolean equals ( Object o )
     {
         if ( this == o )
         {
@@ -88,13 +90,13 @@ public class Groupe implements Serializable
         {
             return false;
         }
-        Groupe groupe = ( Groupe ) o;
+        Groupe groupe = (Groupe) o;
         return id == groupe.id &&
                 Objects.equals( nom, groupe.nom );
     }
 
     @Override
-    public int hashCode()
+    public int hashCode ()
     {
 
         return Objects.hash( id, nom );

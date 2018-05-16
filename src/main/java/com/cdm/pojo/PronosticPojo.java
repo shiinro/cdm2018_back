@@ -5,12 +5,17 @@ import com.cdm.model.Matche;
 import com.cdm.model.Pronostic;
 import com.cdm.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
 public class PronosticPojo
 {
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
     private Integer id;
+
+    private String jourMatch;
 
     private Date dateMatch;
 
@@ -24,9 +29,26 @@ public class PronosticPojo
 
     private Integer scoreEquipeAway;
 
-    public PronosticPojo( int i, Matche match, Pronostic pronostic )
+    public PronosticPojo ()
+    {
+    }
+
+    public PronosticPojo ( Integer id, String jourMatch, Date dateMatch, User user, Equipe equipeHome, Equipe equipeAway, Integer scoreEquipeHome, Integer scoreEquipeAway )
+    {
+        this.id = id;
+        this.jourMatch = jourMatch;
+        this.dateMatch = dateMatch;
+        this.user = user;
+        this.equipeHome = equipeHome;
+        this.equipeAway = equipeAway;
+        this.scoreEquipeHome = scoreEquipeHome;
+        this.scoreEquipeAway = scoreEquipeAway;
+    }
+
+    public PronosticPojo ( int i, Matche match, Pronostic pronostic )
     {
         this.id = i;
+        this.jourMatch = SIMPLE_DATE_FORMAT.format(match.getDateMatch());
         this.dateMatch = match.getDateMatch();
         this.equipeHome = match.getEquipe1();
         this.equipeAway = match.getEquipe2();
@@ -43,6 +65,16 @@ public class PronosticPojo
     public void setId( Integer id )
     {
         this.id = id;
+    }
+
+    public String getJourMatch()
+    {
+        return jourMatch;
+    }
+
+    public void setJourMatch( String jourMatch )
+    {
+        this.jourMatch = jourMatch;
     }
 
     public Date getDateMatch()
@@ -118,6 +150,7 @@ public class PronosticPojo
         }
         PronosticPojo pojo = ( PronosticPojo ) o;
         return Objects.equals( id, pojo.id ) &&
+                Objects.equals( jourMatch, pojo.jourMatch ) &&
                 Objects.equals( dateMatch, pojo.dateMatch ) &&
                 Objects.equals( user, pojo.user ) &&
                 Objects.equals( equipeHome, pojo.equipeHome ) &&
@@ -130,7 +163,7 @@ public class PronosticPojo
     public int hashCode()
     {
 
-        return Objects.hash( id, dateMatch, user, equipeHome, equipeAway, scoreEquipeHome, scoreEquipeAway );
+        return Objects.hash( id, jourMatch, dateMatch, user, equipeHome, equipeAway, scoreEquipeHome, scoreEquipeAway );
     }
 
     @Override
@@ -138,6 +171,7 @@ public class PronosticPojo
     {
         return "PronosticPojo{" +
                 "id=" + id +
+                ", jourMatch=" + jourMatch +
                 ", dateMatch=" + dateMatch +
                 ", user=" + user +
                 ", equipeHome=" + equipeHome +

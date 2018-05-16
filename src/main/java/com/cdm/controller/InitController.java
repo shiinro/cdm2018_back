@@ -52,6 +52,10 @@ public class InitController
         try
         {
             // Connexion au site de la FIFA pour récupérer les matches
+            System.setProperty("http.proxyHost", "10.39.3.69");
+            System.setProperty("http.proxyPort", "8080");
+            System.setProperty("https.proxyHost", "10.39.3.69");
+            System.setProperty("https.proxyPort", "8080");
             Document doc = Jsoup.connect( "http://fr.fifa.com/worldcup/groups/" ).get();
 
             // Récupération des groupes

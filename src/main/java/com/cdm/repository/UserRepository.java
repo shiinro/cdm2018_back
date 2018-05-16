@@ -29,6 +29,6 @@ public interface UserRepository extends JpaRepository<User, Integer>
      * Récupération des points
      * @return
      */
-    @Query("select u.id, u.username, u.points from User u order by u.points desc")
+    @Query("select u from User u join u.classement c order by c.points desc")
     List<User> findClassement();
 }

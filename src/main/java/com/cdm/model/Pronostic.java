@@ -11,7 +11,8 @@ import java.util.Objects;
 public class Pronostic implements Serializable
 {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "id_Sequence")
+    @SequenceGenerator(name = "id_Sequence", sequenceName = "PRONOSTIC_SEQ")
     private int id;
 
     @JsonManagedReference

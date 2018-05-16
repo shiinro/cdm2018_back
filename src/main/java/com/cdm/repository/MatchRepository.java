@@ -31,6 +31,10 @@ public interface MatchRepository extends JpaRepository<Matche, Long>
     @Query( "select m from Matche m where m.groupe.id = ?1" )
     List<Matche> findByGroupeId( int groupeId );
 
+    /**
+     * Méthode pour chercher tous les matchs groupé par date
+     * @return
+     */
     @Query("select m from Matche m group by m.dateMatch")
     Map<Date, List<Matche>> findAllMatchGroupByDate();
 }
